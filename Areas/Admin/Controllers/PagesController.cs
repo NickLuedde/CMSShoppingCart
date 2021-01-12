@@ -8,6 +8,8 @@ namespace CMSShoppingCART.Areas.Admin.Controllers
 {
     public class PagesController : Controller
     {
+
+        //THE INDEX
         // GET: Admin/Pages
         public ActionResult Index()
         {
@@ -25,6 +27,39 @@ namespace CMSShoppingCART.Areas.Admin.Controllers
             return View(pagesList);
         }
 
+
+        //THE DETAILS
+        //Get Page Details
+        public ActionResult PageDetails (int id)
+        {
+            //1. Declare the page View Model
+            PageVM model;
+
+
+            //2. Confirm the page exists
+
+            using (Db db = new Db())
+            {
+                PageDTO dto = db.Pages.Find(id);
+
+                //Confirm that the page actually exists
+
+                if (dto == null)
+                {
+                    return Content("This page doesn't exist. Sorry.");
+                }
+                //3. Initialize the view model
+                model = new PageVM(dto);
+
+                //4. return the view with model.
+                return View(model);
+            }
+
+
+        }
+
+
+        //THE CREATE 
         // Get: Admin/Pages/AddPage (Create a Page - Get)
         [HttpGet]
         public ActionResult AddPage()
@@ -93,6 +128,8 @@ namespace CMSShoppingCART.Areas.Admin.Controllers
             }
         }
 
+
+        //THE EDIT
         // Get: Admin/Pages/EditPage/id (Edit a Page Get)
         [HttpGet]
         public ActionResult EditPage(int id)
@@ -183,5 +220,32 @@ namespace CMSShoppingCART.Areas.Admin.Controllers
                 return RedirectToAction("EditPage");
             }
         }
+
+
+        //THE DELETE
+        //Get: Admin/Pages/DeletePage/Id (Get the page to delete)
+        public ActionResult DeletePage (int id)
+        {
+            //establish a using statement for the db
+
+            using (Db db = new Db())
+            {
+
+                //Get the page
+
+                PageDTO dto = db.Pages.Find(id);
+
+                //remove the page
+                db.Pages.Remove(dto);
+
+                //save
+                db.SaveChanges();
+
+            }
+            //redirect
+            return RedirectToAction("Index");
+           
+        }
+
     }
 }
