@@ -22,6 +22,8 @@ namespace CMSShoppingCART.Models.ViewModels.Pages
 
         
         public int Id { get; set; }
+        [System.Web.Mvc.AllowHtml]
         public string Body { get; set; }
+    
     }
 }
